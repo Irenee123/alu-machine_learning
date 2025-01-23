@@ -1,30 +1,44 @@
-#!/usr/bin/env python3
 import numpy as np
 import matplotlib.pyplot as plt
 
-np.random.seed(5)
-fruit = np.random.randint(0, 20, (4,3))
-# List of species
-species = ["Farrah", "Fred", "Felicia"]
-colors = ["red","yellow","#ff8000","#ffe5b4"]
-labels = ["apples","bananas","oranges","peaches"]
+# Sample data representing the number of fruit each person possesses
+fruit = np.array([
+    [10, 5, 8, 6],  # Farrah's apples, bananas, oranges, peaches
+    [15, 3, 5, 10],  # Fred's apples, bananas, oranges, peaches
+    [8, 7, 12, 4],  # Felicia's apples, bananas, oranges, peaches
+])
 
-# Create a figure and axis
-fig, axs = plt.subplots()
+# Define colors for each fruit
+colors = ['red', 'yellow', '#ff8000', '#ffe5b4']
 
-# Initialize bottom array to stack bars on top of each other
-bottom = np.zeros(3)
+# Define fruit labels and legend labels
+fruits = ['Apples', 'Bananas', 'Oranges', 'Peaches']
+legend_labels = ['Apples', 'Bananas', 'Oranges', 'Peaches']
 
-# Iterate through each row in the fruit array (each represents a different boolean/species group)
-for i, weight_count in enumerate(fruit):
-    p = axs.bar(species, weight_count, width=0.5, label=labels[i], bottom=bottom, color=colors[i])
-    bottom += weight_count  # Update bottom to stack the next bars
+# Plotting the stacked bar graph
+fig, ax = plt.subplots()
+bar_width = 0.5
+bar_positions = np.arange(fruit.shape[0])
 
-# Add title and legend
-axs.set_title("Number of Fruit per Person")
-axs.legend(loc="upper right")
-axs.set_ylim(0,80)
-axs.set_ylabel("Quantity of Fruit")
+for i in range(fruit.shape[1]):
+    ax.bar(bar_positions, fruit[:, i], bar_width, color=colors[i],
+           label=legend_labels[i], bottom=np.sum(fruit[:, :i], axis=1))
 
-# Display the plot
+# Set labels and title
+ax.set_xlabel('Person')
+ax.set_ylabel('Quantity of Fruit')
+ax.set_title('Number of Fruit per Person')
+
+# Set y-axis ticks and range
+ax.set_yticks(np.arange(0, 81, 10))
+ax.set_ylim(0, 80)
+
+# Set x-axis ticks and labels
+ax.set_xticks(bar_positions)
+ax.set_xticklabels(['Farrah', 'Fred', 'Felicia'])
+
+# Display legend
+ax.legend()
+
+# Show the plot
 plt.show()
